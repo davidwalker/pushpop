@@ -4,31 +4,26 @@
 
 (enable-console-print!)
 
-(defonce app-state (atom {:text "Hello Chestnut!" :count 0}))
+(defonce app-state
+  (atom
+    {:stack (list "first" "second")
+     :new-item-text ""}))
 
-(defmulti step 
+(defmulti step
   (fn [_ {:keys [id]}]
    id))
 
 ;; UPDATE
-(defmethod step :change-text [state m]
-  (assoc state :text (:text m)))
 
-(defmethod step :inc [state m]
-  (update state :count inc))
+(defmethod step :change-new-item-text [state m]
+  (assoc state :new-item-text (:text m)))
 
-(defmethod step :dec [state m]
-  (update state :count dec))
+(defmethod step :push [{:keys [new-item-text] :as state} _]
+  (update state :stack conj new-item-text))
 
-(defmethod step :inc2 [state m]
-  (update state :count2 inc))
+(defmethod step :pop [state _]
+  (update state :stack pop))
 
-(defmethod step :dec2 [state m]
-  (update state :count2 dec))
-
-(defmethod step :sum [state m]
-  (pp/pprint (+ (:count state) (:count2 state)))
-  state)
 
 ; VIEW HELPERS
 
@@ -57,15 +52,20 @@
 
 (defn greeting [state]
   [:div
-   [:h1 (:text state)]
-   [:input 
-    {:on-change (on-change :change-text)
-     :value (:text state)}]
-   [counter (:count state) :inc :dec]
-   [counter (:count2 state) :inc2 :dec2]
-   [:button
-    {:on-click (on-click :sum)}
-    "sum"]])
+   [:h1 "Push pop"]
+   [:div
+    [:h2 (first (:stack state))]
+    [:button
+     {:on-click (on-click :pop)}
+     "Pop"]]
+   [:div
+    [:p (:new-item-text state)]
+    [:input
+     {:on-change (on-change :change-new-item-text)
+      :value (:new-item-text state)}]
+    [:button
+     {:on-click (on-click :push)}
+     "push"]]])
 
 
 (defn app []

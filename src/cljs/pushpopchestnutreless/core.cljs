@@ -1,47 +1,48 @@
 (ns pushpopchestnutreless.core
-  (:require [reagent.core :as reagent :refer [atom]]))
+  (:require [reagent.core :as reagent :refer [atom]]
+            [cljs.pprint :as pp]))
 
 (enable-console-print!)
 
 (defonce app-state (atom {:text "Hello Chestnut!" :count 0}))
 
 (defmulti step 
-  (fn [{:keys [id]}]
+  (fn [_ {:keys [id]}]
    id))
 
-
 ;; UPDATE
-(defmethod step :change-text [m]
-  (swap! app-state assoc :text (:text m)))
+(defmethod step :change-text [state m]
+  (assoc state :text (:text m)))
 
-(defmethod step :inc [m]
-  (swap! app-state update :count inc))
+(defmethod step :inc [state m]
+  (update state :count inc))
 
-(defmethod step :dec [m]
-  (swap! app-state update :count dec))
+(defmethod step :dec [state m]
+  (update state :count dec))
 
-(defmethod step :inc2 [m]
-  (swap! app-state update :count2 inc))
+(defmethod step :inc2 [state m]
+  (update state :count2 inc))
 
-(defmethod step :dec2 [m]
-  (swap! app-state update :count2 dec))
-
+(defmethod step :dec2 [state m]
+  (update state :count2 dec))
 
 
 ; VIEW HELPERS
 
+(defn do-step [msg]
+  (swap! app-state step msg))
+
 (defn on-change [msg-id]
-  #(step {:id msg-id
-          :text (-> % .-target .-value)}))
+  #(do-step {:id msg-id
+             :text (-> % .-target .-value)}))
 
 (defn on-click [msg-id]
-  #(step {:id msg-id}))
+  #(do-step {:id msg-id}))
 
 
 ;: VIEW
 
 (defn counter [count inc-msg dec-msg]
-  (.log js/console (str "render counter " inc-msg))
   [:div
    [:h2 (str "count " count)]
    [:button 
@@ -52,7 +53,6 @@
     "-"]])
 
 (defn greeting [state]
-  (.log js/console "render greeting")
   [:div
    [:h1 (:text state)]
    [:input 

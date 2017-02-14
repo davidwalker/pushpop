@@ -47,21 +47,25 @@
 ;: VIEW
 
 
-(defn greeting [state]
+(defn greeting [{:keys [stack] :as state}]
   [:div
    [:h1 "Push pop"]
    [:div
-    [:h2 (first (:stack state))]
-    [:button
-     {:on-click (on-click :pop)}
-     "Pop"]]
-   [:div
-    [:a
-     {:on-click (on-click :toggle-snoop)}
-     (if (:snooping state) "peeking..." "peek...")]
-    (when (:snooping state)
-     (into [:ol]
-      (map #(vec [:li %]) (:stack state))))]
+    (if (empty? stack)
+     [:h2 "And you're done."]
+     [:div
+      [:h2 (first stack)]
+      [:button
+       {:on-click (on-click :pop)}
+       "Pop"]])]
+   (when (not-empty stack)
+    [:div
+     [:a
+      {:on-click (on-click :toggle-snoop)}
+      (if (:snooping state) "peeking..." "peek...")]
+     (when (:snooping state)
+      (into [:ol]
+       (map #(vec [:li %]) (:stack state))))])
    [:div
     [:p (:new-item-text state)]
     [:input

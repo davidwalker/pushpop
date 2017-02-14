@@ -7,7 +7,8 @@
 (defonce app-state
   (atom
     {:stack (list "first" "second")
-     :new-item-text ""}))
+     :new-item-text ""
+     :snooping false}))
 
 (defmulti step
   (fn [_ {:keys [id]}]
@@ -19,10 +20,15 @@
   (assoc state :new-item-text (:text m)))
 
 (defmethod step :push [{:keys [new-item-text] :as state} _]
-  (update state :stack conj new-item-text))
+  (-> state
+    (update :stack conj new-item-text)
+    (assoc :new-item-text "")))
 
 (defmethod step :pop [state _]
   (update state :stack pop))
+
+(defmethod step :toggle-snoop [state _]
+  (update state :snooping not))
 
 
 ; VIEW HELPERS
@@ -40,15 +46,6 @@
 
 ;: VIEW
 
-(defn counter [count inc-msg dec-msg]
-  [:div
-   [:h2 (str "count " count)]
-   [:button 
-    {:on-click (on-click inc-msg)}
-    "+"]
-   [:button 
-    {:on-click (on-click dec-msg)}
-    "-"]])
 
 (defn greeting [state]
   [:div
@@ -58,6 +55,13 @@
     [:button
      {:on-click (on-click :pop)}
      "Pop"]]
+   [:div
+    [:a
+     {:on-click (on-click :toggle-snoop)}
+     (if (:snooping state) "peeking..." "peek...")]
+    (when (:snooping state)
+     (into [:ol]
+      (map #(vec [:li %]) (:stack state))))]
    [:div
     [:p (:new-item-text state)]
     [:input

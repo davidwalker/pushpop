@@ -1,6 +1,7 @@
 (ns pushpopchestnutreless.core
   (:require [reagent.core :as reagent :refer [atom]]
-            [cljs.pprint :as pp]))
+            [cljs.pprint :as pp]
+            [clojure.string :as string]))
 
 (enable-console-print!)
 
@@ -8,7 +9,8 @@
   (atom
     {:stack (list "first" "second")
      :new-item-text ""
-     :snooping false}))
+     :snooping false
+     :filter-text ""}))
 
 (defmulti step
   (fn [_ {:keys [id]}]
@@ -29,6 +31,9 @@
 
 (defmethod step :toggle-snoop [state _]
   (update state :snooping not))
+
+(defmethod step :filter [state {:keys [text]}]
+  (assoc state :filter-text text))
 
 
 ;; VIEW HELPERS
@@ -52,7 +57,7 @@
 ;; VIEW
 
 
-(defn greeting [{:keys [stack] :as state}]
+(defn greeting [{:keys [stack filter-text] :as state}]
   [:div
    [:h1 "Push pop"]
    [:div
@@ -69,8 +74,14 @@
       {:on-click (on-click :toggle-snoop)}
       (if (:snooping state) "peeking..." "peek...")]
      (when (:snooping state)
-      (into [:ol]
-       (map #(vec [:li %]) (:stack state))))])
+       [:div
+        [:input
+         {:placeholder "Search"
+          :on-change (on-change :filter)}]
+        (into [:ol]
+         (->> stack
+              (filter #(string/includes? % filter-text))
+              (map #(vec [:li %]))))])])
    [:div
     [:form
      {:on-submit (on-submit :push)}
@@ -85,4 +96,5 @@
   (.log js/console "render app")
   [greeting @app-state])
 
+(reagent/render [app] (js/document.getElementById "app"))
 (reagent/render [app] (js/document.getElementById "app"))

@@ -67,7 +67,6 @@
       (into [:ol]
        (map #(vec [:li %]) (:stack state))))])
    [:div
-    [:p (:new-item-text state)]
     [:input
      {:on-change (on-change :change-new-item-text)
       :value (:new-item-text state)}]

@@ -26,6 +26,9 @@
 (defmethod step :dec2 [state m]
   (update state :count2 dec))
 
+(defmethod step :sum [state m]
+  (pp/pprint (+ (:count state) (:count2 state)))
+  state)
 
 ; VIEW HELPERS
 
@@ -59,7 +62,10 @@
     {:on-change (on-change :change-text)
      :value (:text state)}]
    [counter (:count state) :inc :dec]
-   [counter (:count2 state) :inc2 :dec2]])
+   [counter (:count2 state) :inc2 :dec2]
+   [:button
+    {:on-click (on-click :sum)}
+    "sum"]])
 
 
 (defn app []

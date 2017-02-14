@@ -31,7 +31,7 @@
   (update state :snooping not))
 
 
-; VIEW HELPERS
+;; VIEW HELPERS
 
 (defn do-step [msg]
   (swap! app-state step msg))
@@ -43,8 +43,13 @@
 (defn on-click [msg-id]
   #(do-step {:id msg-id}))
 
+(defn on-submit [msg-id]
+  (fn [ev]
+    (.preventDefault ev)
+    (do-step {:id msg-id})))
 
-;: VIEW
+
+;; VIEW
 
 
 (defn greeting [{:keys [stack] :as state}]
@@ -67,12 +72,13 @@
       (into [:ol]
        (map #(vec [:li %]) (:stack state))))])
    [:div
-    [:input
-     {:on-change (on-change :change-new-item-text)
-      :value (:new-item-text state)}]
-    [:button
-     {:on-click (on-click :push)}
-     "push"]]])
+    [:form
+     {:on-submit (on-submit :push)}
+     [:input
+      {:on-change (on-change :change-new-item-text)
+       :value (:new-item-text state)}]
+     [:button
+      "push"]]]])
 
 
 (defn app []

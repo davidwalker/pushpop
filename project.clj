@@ -9,11 +9,11 @@
                  [com.cognitect/transit-clj "0.8.285"]
                  [ring "1.4.0"]
                  [ring/ring-defaults "0.2.0"]
-                 [bk/ring-gzip "0.1.1"]
+                 [bk/ring-gzip "0.2.1"]
                  [ring.middleware.logger "0.5.0"]
                  [compojure "1.5.0"]
                  [environ "1.0.3"]
-                 [reagent "0.6.0-rc"]]
+                 [reagent "0.6.0"]]
 
   :plugins [[lein-cljsbuild "1.1.3"]
             [lein-environ "1.0.3"]

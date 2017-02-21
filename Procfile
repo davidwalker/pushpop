@@ -1,1 +1,1 @@
-web: java $JVM_OPTS -cp target/pushpopchestnutreless.jar clojure.main -m pushpopchestnutreless.server
+web: java $JVM_OPTS -cp target/pushpop.jar clojure.main -m pushpop.server

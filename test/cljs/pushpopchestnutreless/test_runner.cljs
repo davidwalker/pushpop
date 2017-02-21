@@ -1,10 +1,10 @@
-(ns pushpopchestnutreless.test-runner
-  (:require
-   [doo.runner :refer-macros [doo-tests]]
-   [pushpopchestnutreless.core-test]
-   [pushpopchestnutreless.common-test]))
+(ns pushpop.test-runner
+ (:require
+  [doo.runner :refer-macros [doo-tests]]
+  [pushpop.core-test]
+  [pushpop.common-test]))
 
 (enable-console-print!)
 
-(doo-tests 'pushpopchestnutreless.core-test
-           'pushpopchestnutreless.common-test)
+(doo-tests 'pushpop.core-test
+           'pushpop.common-test)

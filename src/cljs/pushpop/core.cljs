@@ -1,8 +1,8 @@
-(ns pushpopchestnutreless.core
-  (:require [reagent.core :as reagent :refer [atom]]
-            [cljs.pprint :as pp]
-            [clojure.string :as str]
-            [pushpopchestnutreless.sortable :as sortable]))
+(ns pushpop.core
+ (:require [reagent.core :as reagent :refer [atom]]
+           [cljs.pprint :as pp]
+           [clojure.string :as str]
+           [pushpop.sortable :as sortable]))
 
 (enable-console-print!)
 

@@ -69,7 +69,9 @@
              :text (-> % .-target .-value)}))
 
 (defn on-click [msg-id]
-  #(do-step {:id msg-id}))
+  (fn [ev]
+    (.preventDefault ev)
+    (do-step {:id msg-id})))
 
 (defn on-submit [msg-id]
   (fn [ev]
@@ -101,8 +103,10 @@
  (when (not-empty stack)
   [:div.peek-container
    [:h3
-    {:on-click (on-click :toggle-snoop)}
-    (if snooping? "Peeking..." "Peek...")]
+    [:a
+     {:href "#"
+      :on-click (on-click :toggle-snoop)}
+     (if snooping? "Peeking..." "Peek...")]]
    (when snooping?
      [:div
       [:input

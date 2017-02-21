@@ -87,7 +87,7 @@
    (with-out-str (pp/pprint state))])
 
 (defn stack-list-item-view [{:keys [value]}]
-  [:li value])
+  [:li.stack-item value])
 
 (defn stack-list-view [{:keys [items]}]
   [:ol
@@ -123,7 +123,7 @@
         (into [:ol.history]
          (->> completed
               (filter #(str/includes? % filter-text))
-              (map #(vec [:li %])))))]])]))
+              (map #(vec [:li.stack-item %])))))]])]))
 
 
 (defn push-pop-view [{:keys [stack filter-text] :as state}]
@@ -133,7 +133,7 @@
     (if (empty? stack)
      [:h2 "And you're done."]
      [:div.current-item
-      [:h2 (first stack)]
+      [:h2 "Up Next: " (first stack)]
       [:button.pop-button
        {:on-click (on-click :pop)}
        "Pop"]])]

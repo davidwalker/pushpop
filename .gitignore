@@ -1,6 +1,7 @@
 *.class
 *.jar
 /.cljs_rhino_repl/
+/.eslintcache
 /.lein-*
 /.nrepl-port
 /.repl

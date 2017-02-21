@@ -25,3 +25,5 @@
   (start-less))
 
 (def browser-repl figwheel/cljs-repl)
+(def fig-start figwheel/start-figwheel!)
+(def fig-stop figwheel/start-figwheel!)

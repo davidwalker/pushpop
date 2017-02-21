@@ -1,7 +1,8 @@
 (ns pushpopchestnutreless.core
-  (:require [reagent.core :as reagent :refer [atom]]
-            [cljs.pprint :as pp]
-            [clojure.string :as string]))
+ (:require [reagent.core :as reagent :refer [atom]]
+           [cljs.pprint :as pp]
+           [clojure.string :as string]
+           [pushpopchestnutreless.sortable :as sort]))
 
 (enable-console-print!)
 
@@ -109,7 +110,8 @@
        :on-change (on-change :change-new-item-text)
        :value (:new-item-text state)}]
      [:button
-      "push"]]]])
+      "push"]]
+    [sort/sort-demo]]])
 
 
 (defn app []

@@ -120,8 +120,10 @@
          :on-sort-end (on-sort-end :sort-stack-end)
          :should-cancel-start #(not (str/blank? filter-text))}]]
       [:h4
-       {:on-click (on-click :toggle-history)}
-       (if showing-history? "Hide History" "Show History")]
+       [:a
+        {:href "#"
+         :on-click (on-click :toggle-history)}
+        (if showing-history? "Hide History" "Show History")]]
       [:div
        (when showing-history?
         (into [:ol.history]
@@ -135,7 +137,7 @@
    [:h1 "Push pop"]
    [:div
     (if (empty? stack)
-     [:h2 "And you're done."]
+     [:h2 "Looks like you're done."]
      [:div.current-item
       [:h2 "Up Next: " (first stack)]
       [:button.pop-button

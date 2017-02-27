@@ -14,7 +14,8 @@
                 [compojure "1.5.0"]
                 [environ "1.0.3"]
                 [reagent "0.6.0"]
-                [camel-snake-kebab "0.4.0"]]
+                [camel-snake-kebab "0.4.0"]
+                [alandipert/storage-atom "2.0.1"]]
 
  :plugins [[lein-cljsbuild "1.1.3"]
            [lein-environ "1.0.3"]

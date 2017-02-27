@@ -2,18 +2,23 @@
  (:require [reagent.core :as reagent :refer [atom]]
            [cljs.pprint :as pp]
            [clojure.string :as str]
-           [pushpop.sortable :as sortable]))
+           [pushpop.sortable :as sortable]
+           [alandipert.storage-atom :refer [local-storage]]))
 
 (enable-console-print!)
 
+(def default-state
+  {:stack ()
+   :new-item-text ""
+   :snooping? false
+   :filter-text ""
+   :completed ()
+   :showing-history? false})
+
 (defonce app-state
-  (atom
-    {:stack ()
-     :new-item-text ""
-     :snooping? false
-     :filter-text ""
-     :completed ()
-     :showing-history? false}))
+  (local-storage
+   (atom default-state)
+   :state))
 
 
 (defmulti step
@@ -60,6 +65,9 @@
 
 (defmethod step :sort-stack-end [state {:keys [old-index new-index]}]
   (update state :stack move-item old-index new-index))
+
+(defmethod step :clear [state msg]
+  default-state)
 
 ;; VIEW HELPERS
 
@@ -152,7 +160,11 @@
        :on-change (on-change :change-new-item-text)
        :value (:new-item-text state)}]
      [:button
-      "push"]]]])
+      "push"]]]
+   [:div
+    [:button
+     {:on-click (on-click :clear)}
+     "Clear"]]])
 
 
 (defn app []

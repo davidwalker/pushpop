@@ -3,7 +3,9 @@
            [cljs.pprint :as pp]
            [clojure.string :as str]
            [pushpop.sortable :as sortable]
-           [alandipert.storage-atom :refer [local-storage]]))
+           [alandipert.storage-atom :refer [local-storage]]
+           [pushpop.elm-arch :as e])
+ (:require-macros [pushpop.elm-arch :refer [defup]]))
 
 (enable-console-print!)
 
@@ -20,13 +22,8 @@
    (atom default-state)
    :state))
 
-
-(defmulti step
-  (fn [_ {:keys [id]}]
-   id))
-
 (defn do-step [msg]
-  (swap! app-state step msg))
+  (swap! app-state e/step msg))
 
 
 ;; HELPERS
@@ -41,32 +38,32 @@
 
 ;; UPDATE
 
-(defmethod step :change-new-item-text [state m]
+(defup :change-new-item-text [state m]
   (assoc state :new-item-text (:text m)))
 
-(defmethod step :push [{:keys [new-item-text] :as state} _]
+(defup :push [{:keys [new-item-text] :as state} _]
   (-> state
     (update :stack conj new-item-text)
     (assoc :new-item-text "")))
 
-(defmethod step :pop [state _]
+(defup :pop [state _]
   (-> state
    (update :completed conj (peek (:stack state)))
    (update :stack pop)))
 
-(defmethod step :toggle-snoop [state _]
+(defup :toggle-snoop [state _]
   (update state :snooping? not))
 
-(defmethod step :filter [state {:keys [text]}]
+(defup :filter [state {:keys [text]}]
   (assoc state :filter-text text))
 
-(defmethod step :toggle-history [state _]
+(defup :toggle-history [state _]
   (update state :showing-history? not))
 
-(defmethod step :sort-stack-end [state {:keys [old-index new-index]}]
+(defup :sort-stack-end [state {:keys [old-index new-index]}]
   (update state :stack move-item old-index new-index))
 
-(defmethod step :clear [state msg]
+(defup :clear [state msg]
   default-state)
 
 ;; VIEW HELPERS
